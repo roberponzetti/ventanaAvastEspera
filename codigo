@@ -1,0 +1,49 @@
+Imports System.Runtime.InteropServices
+Imports System.Diagnostics
+
+Public Class Form1
+
+    Dim ventanaName As String
+    Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        For Each p As Process In Process.GetProcesses
+
+            If p.MainWindowTitle = Nothing Then
+
+            Else
+
+                ListBox1.Items.Add(p.MainWindowTitle)
+
+            End If
+        Next
+        ventanaName = ListBox1.SelectedItem
+
+    End Sub
+
+    <DllImport("user32.dll", EntryPoint:="FindWindowW")>
+    Private Shared Function FindWindowW(<MarshalAs(UnmanagedType.LPTStr)> ByVal lpClassName As String, <MarshalAs(UnmanagedType.LPTStr)> ByVal lpWindowName As String) As IntPtr
+    End Function
+
+    <DllImport("user32.dll", EntryPoint:="GetWindowRect")>
+    Private Shared Function GetWindowRect(ByVal hWnd As IntPtr, ByRef lpRect As RECT) As <MarshalAs(UnmanagedType.Bool)> Boolean
+    End Function
+
+    <StructLayout(LayoutKind.Sequential)>
+    Private Structure RECT
+        Public left, top, right, bottom As Integer
+    End Structure
+
+    Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
+        Dim a As Integer
+        Dim ventanaLista As String
+
+        For a = 0 To ListBox1.Items.Count - 1
+
+            ventanaLista = ListBox1.Items(a)
+
+            If ventanaLista.Contains("hola") Then
+                Application.Exit()
+            End If
+        Next
+
+    End Sub
+End Class
